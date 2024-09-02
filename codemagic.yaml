@@ -17,6 +17,6 @@ workflows:
       - name: Build dylib
         script: |
           cd FloatingButton
-          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib -framework UIKit FloatingButton.m DylibLoader.m -o libFloatingButton.dylib
+          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib -framework UIKit -o libFloatingButton.dylib FloatingButton.m DylibLoader.m
     artifacts:
       - FloatingButton/libFloatingButton.dylib
