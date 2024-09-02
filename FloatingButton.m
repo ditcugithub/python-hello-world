@@ -21,7 +21,17 @@
 }
 
 - (void)showButton {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *keyWindow = nil;
+    if (@available(iOS 13.0, *)) {
+        for (UIWindowScene* scene in [UIApplication sharedApplication].connectedScenes) {
+            if (scene.activationState == UISceneActivationStateForegroundActive) {
+                keyWindow = scene.windows.firstObject;
+                break;
+            }
+        }
+    } else {
+        keyWindow = [UIApplication sharedApplication].keyWindow;
+    }
     [keyWindow addSubview:self];
 }
 
@@ -34,7 +44,7 @@
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture {
-    UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    UIWindow *keyWindow = self.window;
     CGPoint translation = [gesture translationInView:keyWindow];
     CGPoint newCenter = CGPointMake(self.center.x + translation.x, self.center.y + translation.y);
     self.center = newCenter;
