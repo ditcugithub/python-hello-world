@@ -1,0 +1,16 @@
+workflows:
+  ios-build:
+    name: iOS Build
+    environment:
+      xcode: latest
+    scripts:
+      - name: Install dependencies
+        script: |
+          # Install any necessary dependencies here (e.g., CocoaPods)
+          pod install
+      - name: Build dylib
+        script: |
+          # Compile your .m file into a dylib
+          clang -dynamiclib -o libtest.dylib test.m -framework UIKit -framework Foundation
+    artifacts:
+      - libtest.dylib
