@@ -1,16 +1,22 @@
 workflows:
-  ios-build:
-    name: iOS Build
+  build_dylib:
+    name: Build Dylib
     environment:
       xcode: latest
+      cocoapods: default
+      flutter: stable
     scripts:
-      - name: Install dependencies
+      - name: Set up build environment
         script: |
-          # Install any necessary dependencies here (e.g., CocoaPods)
-          pod install
+          # Create necessary directories
+          mkdir -p FloatingButton
+      - name: Copy files
+        script: |
+          # Copy your source files into the build directory
+          cp FloatingButton.h FloatingButton.m DylibLoader.m FloatingButton/
       - name: Build dylib
         script: |
-          # Compile your .m file into a dylib
-          clang -dynamiclib -o libtest.dylib test.m -framework UIKit -framework Foundation
+          cd FloatingButton
+          xcrun -sdk iphoneos clang -arch arm64 -dynamiclib -framework UIKit FloatingButton.m DylibLoader.m -o libFloatingButton.dylib
     artifacts:
-      - libtest.dylib
+      - FloatingButton/libFloatingButton.dylib
