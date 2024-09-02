@@ -4,28 +4,25 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Xcode
-      run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+      - name: Set up environment
+        run: |
+          xcode-select --install
 
-    - name: Build dylib
-      run: |
-        clang -dynamiclib -o floatingButton.dylib floatingButton.m -framework UIKit -arch arm64
-        ls -lh floatingButton.dylib
+      - name: Build dylib
+        run: |
+          clang -dynamiclib -o libtest.dylib floatingButton.m -framework UIKit -framework Foundation
 
-    - name: Upload dylib
-      uses: actions/upload-artifact@v3
-      with:
-        name: floatingButton.dylib
-        path: floatingButton.dylib
+      - name: Upload dylib
+        uses: actions/upload-artifact@v3
+        with:
+          name: dylib-file
+          path: libtest.dylib
